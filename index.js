@@ -1,15 +1,19 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
 import { connectDb } from './config/db.config.js';
+import { routes } from './routes/index.route.js';
 
-const app = express()
-dotenv.config()
+const app = express();
+dotenv.config();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 connectDb();
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
+// setup routes
+routes(app);
 
 app.listen(process.env.PORT || 4000, () => {
   console.log('App started');
