@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { SECRET_ACCESS_TOKEN, SECRET_REFRESH_TOKEN } from '../config/constant.js';
-import { generateToken } from '../helper/index.js';
+import { generateToken, verifyToken } from '../helper/index.js';
 import { User } from "../models/user.model.js";
 
 export const authController = {
@@ -95,7 +95,7 @@ export const authController = {
           message: 'Bad request',
         });
       }
-      
+
       const user = await User.findOne({ email: req.body.email });
       if (!user) {
         return res.status(404).send({
@@ -124,6 +124,26 @@ export const authController = {
           });
         }
       }
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  },
+  getInfoUser: async (req, res) => {
+    try {
+      const token = req.headers.authorization;
+      const decoded = await verifyToken(token, SECRET_ACCESS_TOKEN);
+      const userId = decoded._id;
+
+      const user = await User.findById(userId).select('-password -accessToken -refreshToken');
+      if (!user) {
+        return res.status(404).send({
+          code: 404,
+          message: `User is not exists!`
+        });
+      }
+      res.status(200).send(user);
     } catch (error) {
       res.status(500).send({
         message: 'Server Error',

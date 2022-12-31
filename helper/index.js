@@ -9,3 +9,8 @@ export const generateToken = async (user, secretKey, tokenLife) => {
   const token = await jwt.sign(data, secretKey, { expiresIn: tokenLife || '1d' });
   return token;
 };
+
+export const verifyToken = async (token, secretKey) => {
+  const decoded = await jwt.verify(token.replace('Bearer ', ''), secretKey);
+  return decoded;
+};
