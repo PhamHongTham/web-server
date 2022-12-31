@@ -70,14 +70,57 @@ export const authController = {
               });
             }
             return res.status(200).json({
-              code: 200,
-              message: 'Login success'
+              accessToken,
+              refreshToken
             });
           })
         } else {
           return res.status(403).send({
             code: 403,
             message: 'Email or password is invalid!'
+          });
+        }
+      }
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  },
+  changePassword: async (req, res) => {
+    try {
+      if (!req.body) {
+        return res.status(400).send({
+          code: 400,
+          message: 'Bad request',
+        });
+      }
+      
+      const user = await User.findOne({ email: req.body.email });
+      if (!user) {
+        return res.status(404).send({
+          code: 404,
+          message: `User is not exists!`
+        });
+      } else {
+        const match = await bcrypt.compareSync(req.body.password, user.password);
+        if (match) {
+          user.password = bcrypt.hashSync(req.body.newPassword, 10);
+          user.save((err) => {
+            if (err) {
+              return res.status(403).json({
+                code: 403,
+                message: 'Something went wrong',
+              });
+            }
+            return res.status(200).json({
+              message: 'Update password success',
+            });
+          })
+        } else {
+          return res.status(403).send({
+            code: 403,
+            message: 'Password is wrong'
           });
         }
       }
