@@ -131,10 +131,11 @@ export const authController = {
     }
   },
   getInfoUser: async (req, res) => {
+    const id = req.params.id;
     try {
-      const token = req.headers.authorization;
+      const token = req?.headers?.authorization;
       const decoded = await verifyToken(token, SECRET_ACCESS_TOKEN);
-      const userId = decoded._id;
+      const userId = id === 'me' ? decoded._id : id;
 
       const user = await User.findById(userId).select('-password -accessToken -refreshToken');
       if (!user) {

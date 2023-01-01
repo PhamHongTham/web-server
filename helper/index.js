@@ -11,6 +11,9 @@ export const generateToken = async (user, secretKey, tokenLife) => {
 };
 
 export const verifyToken = async (token, secretKey) => {
+  if (!token) {
+    return;
+  }
   const decoded = await jwt.verify(token.replace('Bearer ', ''), secretKey);
   return decoded;
 };
