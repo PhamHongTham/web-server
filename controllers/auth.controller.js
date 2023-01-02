@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { uploadImage } from '../config/cloudynary.config.js';
 import { SECRET_ACCESS_TOKEN, SECRET_REFRESH_TOKEN } from '../config/constant.js';
 import { generateToken, verifyToken } from '../helper/index.js';
 import { User } from "../models/user.model.js";
@@ -149,6 +150,44 @@ export const authController = {
       res.status(500).send({
         message: 'Server Error',
       });
+    }
+  },
+  updateInfo: async (req, res) => {
+    if (!req.body) {
+      return res.status(400).send({
+        code: 400,
+        message: 'Bad Request',
+      });
+    }
+    const imgUrl = await uploadImage(req.body.image);
+
+    const token = req?.headers?.authorization;
+    const decoded = await verifyToken(token, SECRET_ACCESS_TOKEN);
+    const user = await User.findById(decoded._id);
+    if (!user) {
+      return res.status(404).send({
+        code: 404,
+        message: `User is not exists!`
+      });
+    } else {
+      user.firstName = req.body.firstName;
+      user.lastName = req.body.lastName;
+      user.gender = req.body.gender;
+      user.dob = req.body.dob;
+      user.displayName = req.body.displayName;
+      user.phone = req.body.phone;
+      user.picture = imgUrl;
+      user.save((err) => {
+        if (err) {
+          return res.status(403).json({
+            code: 403,
+            message: 'Something went wrong',
+          });
+        }
+        res.status(200).send({
+          message: 'Update info success',
+        });
+      })
     }
   }
 };

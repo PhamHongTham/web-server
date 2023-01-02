@@ -11,4 +11,19 @@ const configCloudynary = () => {
   });
 };
 
+export const uploadImage = async (path) => {
+  try {
+    const data = await cloudinary.uploader.upload(path, {
+      folder: "Boogle",
+    });
+  
+    return data.secure_url;
+  } catch (error) {
+    return {
+      code: 400,
+      message: 'Server Error'
+    }
+  }
+};
+
 export default configCloudynary;
