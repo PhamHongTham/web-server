@@ -29,7 +29,7 @@ export const authController = {
           res.status(400).send({
             code: 400,
             message: err.message,
-          })
+          });
         }
       });
       res.status(200).send({
