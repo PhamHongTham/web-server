@@ -6,5 +6,6 @@ const postRouter = express.Router();
 
 postRouter.post('/', isAuth, postController.createPost);
 postRouter.put('/:id', isAuth, postController.updatePost);
+postRouter.delete('/:id', isAuth, postController.deletePost);
 
 export default postRouter;
