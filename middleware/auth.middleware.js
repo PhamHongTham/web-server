@@ -5,6 +5,9 @@ export const isAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization;;
     const decoded = await verifyToken(token, SECRET_ACCESS_TOKEN);
+    if (!decoded) {
+      return res.status(401).json({ message: 'Authentication failed' });
+    }
     req.user = decoded;
     next();
   } catch(err) {

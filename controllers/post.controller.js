@@ -15,6 +15,7 @@ export const postController = {
         description: req.body.description,
         content: req.body.content,
         cover: req.body.cover,
+        userId: req.user._id,
       });
       post.save((err) => {
         if (err) {
@@ -42,6 +43,10 @@ export const postController = {
         });
       }
       const post = await Post.findById(id);
+      if (req.user._id !== post.userId.toHexString()) {
+        return res.status(401).send({ code: 401, message: 'Authentication failed' });
+      }
+      
       post.title = req.body.title;
       post.description = req.body.description;
       post.content = req.body.content;
