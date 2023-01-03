@@ -175,7 +175,6 @@ export const authController = {
       user.gender = req.body.gender;
       user.dob = req.body.dob;
       user.displayName = req.body.displayName;
-      user.phone = req.body.phone;
       user.picture = imgUrl;
       user.save((err) => {
         if (err) {
