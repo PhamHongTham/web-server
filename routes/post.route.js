@@ -8,4 +8,7 @@ postRouter.post('/', isAuth, postController.createPost);
 postRouter.put('/:id', isAuth, postController.updatePost);
 postRouter.delete('/:id', isAuth, postController.deletePost);
 
+// Like
+postRouter.put('/:id/likes', isAuth, postController.likePost);
+
 export default postRouter;

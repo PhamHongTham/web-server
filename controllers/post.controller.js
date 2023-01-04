@@ -106,5 +106,46 @@ export const postController = {
         message: 'Server Error',
       });
     }
+  },
+  likePost: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const post = await Post.findById(id);
+
+      if (!post) {
+        return res.status(403).send({
+          code: 403,
+          message: 'Post not found',
+        });
+      }
+
+      if (req.user._id !== post.userId.toHexString()) {
+        return res.status(401).send({ code: 401, message: 'Authentication failed' });
+      }
+
+      let index = post.likes.indexOf(req.user._id);
+      if (index > -1) {
+        post.likes.splice(index, 1);
+      } else {
+        post.likes.push(req.user._id);
+      }
+
+      post.save((err) => {
+        if (err) {
+          return res.status(400).send({
+            code: 400,
+            message: 'Some thing went wrong',
+          });
+        }
+        return res.status(200).send({
+          isLiked: index > -1 ? false : true,
+        });
+      })
+
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
   }
 };
