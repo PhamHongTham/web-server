@@ -27,7 +27,17 @@ const PostSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     }
-  ]
+  ],
+  tags: {
+    type: [String],
+    required: true,
+    minlength: [1, 'Tags is required to have at least 1 item']
+  },
+  status: {
+    type: String,
+    enum: ['public', 'private'],
+    default: 'public'
+  },
 }, {
   timestamps: true,
 });

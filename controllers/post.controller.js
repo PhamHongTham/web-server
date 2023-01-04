@@ -15,6 +15,8 @@ export const postController = {
         description: req.body.description,
         content: req.body.content,
         cover: req.body.cover,
+        tags: req.body.tags,
+        status: req.body.status || 'public',
         userId: req.user._id,
       });
       post.save((err) => {
@@ -147,5 +149,26 @@ export const postController = {
         message: 'Server Error',
       });
     }
+  },
+  getDetailPost: async (req, res) => {
+    const id = req.params.id;
+
+    try {
+      const post = await Post.findById(id);
+      if (!post) {
+        return res.status(403).send({
+          code: 403,
+          message: 'Post not found',
+        });
+      }
+      
+      return res.status(200).send(post);
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
   }
+
+  // get recommend post
 };
