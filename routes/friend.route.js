@@ -5,5 +5,6 @@ import { isAuth } from "../middleware/auth.middleware.js";
 const friendRouter = express.Router();
 
 friendRouter.post('/follow', isAuth, friendController.followUser);
+friendRouter.get('/:id/followers', friendController.getFollowers);
 
 export default friendRouter;
