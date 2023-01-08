@@ -6,5 +6,6 @@ const friendRouter = express.Router();
 
 friendRouter.post('/follow', isAuth, friendController.followUser);
 friendRouter.get('/:id/followers', friendController.getFollowers);
+friendRouter.get('/:id/followings', friendController.getFollowings);
 
 export default friendRouter;

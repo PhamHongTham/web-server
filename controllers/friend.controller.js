@@ -53,7 +53,7 @@ export const friendController = {
           message: 'Bad Request',
         });
       }
-      const user = await User.findById(req.params.id);
+      const user = await User.findById(req.params.id).populate('follower', 'displayName');
       if (!user) {
         return res.status(403).send({
           code: 403,
@@ -61,6 +61,28 @@ export const friendController = {
         });
       }
       res.status(200).send(user.follower);
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  },
+  getFollowings: async (req, res) => {
+    try {
+      if (!req.params.id) {
+        return res.status(400).send({
+          code: 400,
+          message: 'Bad Request',
+        });
+      }
+      const user = await User.findById(req.params.id).populate('following', 'displayName');
+      if (!user) {
+        return res.status(403).send({
+          code: 403,
+          message: 'User not found',
+        });
+      }
+      res.status(200).send(user.following);
     } catch (error) {
       res.status(500).send({
         message: 'Server Error',
