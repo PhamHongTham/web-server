@@ -5,5 +5,6 @@ import { isAuth } from "../middleware/auth.middleware";
 const bookmarkRouter = express.Router();
 
 bookmarkRouter.post('/', isAuth, bookmarkController.addBookmark);
+bookmarkRouter.get('/', isAuth, bookmarkController.getBookmarkUser);
 
 export default bookmarkRouter;

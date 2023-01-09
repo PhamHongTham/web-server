@@ -38,5 +38,23 @@ export const bookmarkController = {
         message: 'Server Error',
       });
     }
-  }
+  },
+  getBookmarkUser: async (req, res) => {
+    try {
+      const posts = await User.findById(req.user._id).populate('bookmarks');
+      if (!posts) {
+        return res.status(403).send({
+          code: 403,
+          message: 'Something went wrong',
+        });
+      }
+      res.status(200).send({
+        post: posts.bookmarks || [],
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  },
 };
