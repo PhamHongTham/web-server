@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
+import cors from 'cors';
 import { connectDb } from './config/db.config.js';
 import { routes } from './routes/index.route.js';
 import configCloudynary from './config/cloudynary.config.js';
@@ -8,6 +9,7 @@ import configCloudynary from './config/cloudynary.config.js';
 const app = express();
 dotenv.config();
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

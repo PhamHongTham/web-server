@@ -13,6 +13,14 @@ export const authController = {
           message: 'Bad Request',
         });
       }
+
+      const emailExists = await User.countDocuments({ email: req.body.email }).exec();
+      if (emailExists > 0) {
+        return res.status(401).send({
+          code: 401,
+          message: 'Email is exists',
+        });
+      }
   
       const user = new User({
         email: req.body.email,
@@ -21,6 +29,7 @@ export const authController = {
         displayName: req.body.displayName,
         gender: req.body.gender,
         dob: req.body.dob,
+        phone: req.body.phone,
         password: bcrypt.hashSync(req.body.password, 10),
       });
   
@@ -52,8 +61,8 @@ export const authController = {
   
       const user = await User.findOne({ email: req.body.email });
       if (!user) {
-        return res.status(404).send({
-          code: 404,
+        return res.status(401).send({
+          code: 401,
           message: `Email or password is invalid!`
         });
       } else {
@@ -132,6 +141,7 @@ export const authController = {
     }
   },
   getInfoUser: async (req, res) => {
+    console.log('get user info')
     const id = req.params.id;
     try {
       const token = req?.headers?.authorization;
