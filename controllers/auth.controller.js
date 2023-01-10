@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-import { uploadImage } from '../config/cloudynary.config.js';
 import { SECRET_ACCESS_TOKEN, SECRET_REFRESH_TOKEN } from '../config/constant.js';
 import { generateToken, verifyToken } from '../helper/index.js';
 import { User } from "../models/user.model.js";
@@ -141,7 +140,6 @@ export const authController = {
     }
   },
   getInfoUser: async (req, res) => {
-    console.log('get user info')
     const id = req.params.id;
     try {
       const token = req?.headers?.authorization;
@@ -169,7 +167,6 @@ export const authController = {
         message: 'Bad Request',
       });
     }
-    const imgUrl = await uploadImage(req.body.image);
 
     const token = req?.headers?.authorization;
     const decoded = await verifyToken(token, SECRET_ACCESS_TOKEN);
@@ -184,8 +181,9 @@ export const authController = {
       user.lastName = req.body.lastName;
       user.gender = req.body.gender;
       user.dob = req.body.dob;
+      user.phone = req.body.phone;
       user.displayName = req.body.displayName;
-      user.picture = imgUrl;
+      user.picture = req.body.picture;
       user.save((err) => {
         if (err) {
           return res.status(403).json({

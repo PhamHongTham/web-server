@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken';
+import path from 'path'
+import multer from 'multer'
 
 export const generateToken = async (user, secretKey, tokenLife) => {
   const data = {
@@ -17,3 +19,16 @@ export const verifyToken = async (token, secretKey) => {
   const decoded = await jwt.verify(token.replace('Bearer ', ''), secretKey);
   return decoded;
 };
+
+export const upload = multer({
+  storage: multer.diskStorage({}),
+  fileFilter: (req, file, cb) => {
+    let ext = path.extname(file.originalname);
+    if(ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png"){
+      cb(new Error("file type is not supported"))
+      return;
+    }
+    cb(null, true);
+  }
+});
+
