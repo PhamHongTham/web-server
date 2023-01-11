@@ -105,14 +105,14 @@ export const authController = {
         });
       }
 
-      const user = await User.findOne({ email: req.body.email });
+      const user = await User.findById(req.user._id);
       if (!user) {
         return res.status(404).send({
           code: 404,
           message: `User is not exists!`
         });
       } else {
-        const match = await bcrypt.compareSync(req.body.password, user.password);
+        const match = await bcrypt.compareSync(req.body.oldPassword, user.password);
         if (match) {
           user.password = bcrypt.hashSync(req.body.newPassword, 10);
           user.save((err) => {
