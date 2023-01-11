@@ -1,4 +1,7 @@
 import { Post } from "../models/post.model";
+import { User } from "../models/user.model";
+import { SECRET_ACCESS_TOKEN } from '../config/constant.js';
+import { verifyToken } from '../helper/index.js'
 
 export const postController = {
   createPost: async (req, res) => {
@@ -152,17 +155,33 @@ export const postController = {
   },
   getDetailPost: async (req, res) => {
     const id = req.params.id;
+    const token = req.headers.authorization;
+    const decoded = await verifyToken(token, SECRET_ACCESS_TOKEN);
 
     try {
-      const post = await Post.findById(id);
+      const post = await Post.findById(id).lean();
       if (!post) {
         return res.status(403).send({
           code: 403,
           message: 'Post not found',
         });
       }
-      
-      return res.status(200).send(post);
+      const author = await User.findById(post.userId);
+      const userRequest = await User.findById(decoded._id);
+      let isInBookmark = false;
+      let isFollowed = false;
+
+      if (token) {
+        isInBookmark = userRequest.bookmarks.includes(post._id);
+        isFollowed = author.followers.includes(userRequest._id);
+      }
+
+      return res.status(200).send({
+        ...post,
+        user: author,
+        isInBookmark,
+        isFollowed,
+      });
     } catch (error) {
       res.status(500).send({
         message: 'Server Error',

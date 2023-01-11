@@ -20,19 +20,19 @@ export const friendController = {
       const userFollow = await User.findById(req.body.followingId);
       const userWantFollow = await User.findById(req.user._id);
 
-      let index = userFollow.follower.indexOf(userWantFollow._id);
-      let indexFollowing = userWantFollow.following.indexOf(userFollow._id);
+      let index = userFollow.followers.indexOf(userWantFollow._id);
+      let indexFollowing = userWantFollow.followings.indexOf(userFollow._id);
 
       if (index > -1) {
-        userFollow.follower.splice(index, 1);
+        userFollow.followers.splice(index, 1);
       } else {
-        userFollow.follower.push(userWantFollow._id);
+        userFollow.followers.push(userWantFollow._id);
       }
 
       if (indexFollowing > -1) {
-        userWantFollow.following.splice(indexFollowing, 1);
+        userWantFollow.followings.splice(indexFollowing, 1);
       } else {
-        userWantFollow.following.push(userFollow._id);
+        userWantFollow.followings.push(userFollow._id);
       }
 
       await userFollow.save();
@@ -53,14 +53,14 @@ export const friendController = {
           message: 'Bad Request',
         });
       }
-      const user = await User.findById(req.params.id).populate('follower', 'displayName');
+      const user = await User.findById(req.params.id).populate('followers', 'displayName');
       if (!user) {
         return res.status(403).send({
           code: 403,
           message: 'User not found',
         });
       }
-      res.status(200).send(user.follower);
+      res.status(200).send(user.followers);
     } catch (error) {
       res.status(500).send({
         message: 'Server Error',
@@ -82,7 +82,7 @@ export const friendController = {
           message: 'User not found',
         });
       }
-      res.status(200).send(user.following);
+      res.status(200).send(user.followings);
     } catch (error) {
       res.status(500).send({
         message: 'Server Error',

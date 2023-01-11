@@ -38,13 +38,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'],
   },
-  follower: [
+  followers: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     }
   ],
-  following: [
+  followings: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
