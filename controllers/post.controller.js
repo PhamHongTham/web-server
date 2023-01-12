@@ -2,6 +2,7 @@ import { Post } from "../models/post.model";
 import { User } from "../models/user.model";
 import { SECRET_ACCESS_TOKEN } from '../config/constant.js';
 import { verifyToken } from '../helper/index.js'
+import mongoose from "mongoose";
 
 export const postController = {
   createPost: async (req, res) => {
@@ -170,10 +171,12 @@ export const postController = {
       const userRequest = await User.findById(decoded._id);
       let isInBookmark = false;
       let isFollowed = false;
+      let isLiked = false;
 
       if (token) {
-        isInBookmark = userRequest.bookmarks.includes(post._id);
-        isFollowed = author.followers.includes(userRequest._id);
+        isLiked = post.likes.some(id => id.equals(userRequest._id));
+        isFollowed = author.followers.some(id => id.equals(userRequest._id));
+        isInBookmark = userRequest.bookmarks.some(id => id.equals(post._id));
       }
 
       return res.status(200).send({
@@ -181,6 +184,7 @@ export const postController = {
         user: author,
         isInBookmark,
         isFollowed,
+        isLiked,
       });
     } catch (error) {
       res.status(500).send({
