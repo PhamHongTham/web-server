@@ -3,6 +3,7 @@ import { User } from "../models/user.model";
 import { SECRET_ACCESS_TOKEN } from '../config/constant.js';
 import { verifyToken } from '../helper/index.js'
 import mongoose from "mongoose";
+import { Comment } from "../models/comment.model";
 
 export const postController = {
   createPost: async (req, res) => {
@@ -191,7 +192,80 @@ export const postController = {
         message: 'Server Error',
       });
     }
-  }
+  },
 
-  // get recommend post
+  // comments
+  createComment: async (req, res) => {
+    const id = req.params.id;
+    const { content } = req.body;
+
+    try {
+      if (!req.body) {
+        return res.status(400).send({
+          code: 400,
+          message: 'Bad Request',
+        });
+      }
+      const post = await Post.findById(id);
+      
+      if (!post) {
+        return res.status(403).send({
+          code: 403,
+          message: 'Post not found',
+        });
+      }
+
+      const newComment = new Comment({
+        content,
+        user: req.user._id,
+      });
+
+      newComment.save((err) => {
+        if (err) {
+          return res.status(400).send({
+            code: 400,
+            message: err.message,
+          });
+        }
+        post.comments.push(newComment._id);
+        post.save();
+        return res.status(200).send(newComment);
+      })
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  },
+  getCommentsOfPost: async (req, res) => {
+    const id = req.params.id;
+    try {
+      if (!id) {
+        return res.status(400).send({
+          code: 400,
+          message: 'Bad Request',
+        });
+      }
+      const post = await Post.findById(id).populate({
+        path: 'comments',
+        populate: {
+          path: 'user',
+          select: '_id displayName lastName email picture',
+          model: 'User',
+        }
+      });
+
+      if (!post) {
+        return res.status(403).send({
+          code: 403,
+          message: 'Post not found',
+        });
+      }
+      res.status(200).send(post.comments);
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  }
 };

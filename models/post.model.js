@@ -38,6 +38,12 @@ const PostSchema = new mongoose.Schema({
     enum: ['public', 'private'],
     default: 'public'
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment'
+    }
+  ],
 }, {
   timestamps: true,
 });
