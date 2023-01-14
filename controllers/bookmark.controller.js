@@ -4,7 +4,7 @@ import { User } from "../models/user.model";
 export const bookmarkController = {
   addBookmark: async (req, res) => {
     try {
-      if (!req.body) {
+      if (!req.body.postId) {
         return res.status(400).send({
           code: 400,
           message: 'Bad Request',
@@ -22,16 +22,13 @@ export const bookmarkController = {
 
       let index = user.bookmarks.indexOf(post._id);
       if (index > -1) {
-        return res.status(403).send({
-          code: 403,
-          message: 'Post is exists in your bookmark',
-        });
+        user.bookmarks.splice(index, 1);
+      } else {
+        user.bookmarks.push(post._id);
       }
-      
-      user.bookmarks.push(post._id);
       await user.save();
       res.status(200).send({
-        message: 'Add to bookmark success'
+        isInBookmark: index > -1 ? false : true
       });
     } catch (error) {
       res.status(500).send({
