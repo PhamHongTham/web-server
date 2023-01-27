@@ -53,14 +53,24 @@ export const friendController = {
           message: 'Bad Request',
         });
       }
-      const user = await User.findById(req.params.id).populate('followers', 'displayName');
-      if (!user) {
-        return res.status(403).send({
-          code: 403,
-          message: 'User not found',
+
+      User.findById(req.params.id)
+      .populate('followers', '_id displayName picture')
+      .exec((err, user) => {
+        if (err) {
+          return res.status(403).send({
+            code: 403,
+            message: 'Something went wrong',
+          });
+        }
+        const followers = user.followers.map((follower) => {
+          return {
+            ...follower._doc,
+            isFollowed: user.followings.includes(follower._id),
+          };
         });
-      }
-      res.status(200).send(user.followers);
+        res.status(200).send(followers);
+      });
     } catch (error) {
       res.status(500).send({
         message: 'Server Error',
@@ -75,14 +85,23 @@ export const friendController = {
           message: 'Bad Request',
         });
       }
-      const user = await User.findById(req.params.id).populate('following', 'displayName');
-      if (!user) {
-        return res.status(403).send({
-          code: 403,
-          message: 'User not found',
+      User.findById(req.params.id)
+      .populate('followings', '_id displayName picture')
+      .exec((err, user) => {
+        if (err) {
+          return res.status(403).send({
+            code: 403,
+            message: 'Something went wrong',
+          });
+        }
+        const followings = user.followings.map((following) => {
+          return {
+            ...following._doc,
+            isFollowed: user.followers.includes(following._id),
+          };
         });
-      }
-      res.status(200).send(user.followings);
+        res.status(200).send(followings);
+      });
     } catch (error) {
       res.status(500).send({
         message: 'Server Error',

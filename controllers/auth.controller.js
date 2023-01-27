@@ -139,14 +139,27 @@ export const authController = {
       });
     }
   },
+  getInfoUserMe: async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id).select('-password -accessToken -refreshToken');
+      if (!user) {
+        return res.status(404).send({
+          code: 404,
+          message: `User is not exists!`
+        });
+      }
+      res.status(200).send(user);
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  },
   getInfoUser: async (req, res) => {
     const id = req.params.id;
     try {
-      const token = req?.headers?.authorization;
-      const decoded = await verifyToken(token, SECRET_ACCESS_TOKEN);
-      const userId = id === 'me' ? decoded._id : id;
 
-      const user = await User.findById(userId).select('-password -accessToken -refreshToken');
+      const user = await User.findById(id).select('-password -accessToken -refreshToken');
       if (!user) {
         return res.status(404).send({
           code: 404,

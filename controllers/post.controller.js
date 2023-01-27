@@ -2,7 +2,6 @@ import { Post } from "../models/post.model";
 import { User } from "../models/user.model";
 import { SECRET_ACCESS_TOKEN } from '../config/constant.js';
 import { verifyToken } from '../helper/index.js'
-import mongoose from "mongoose";
 import { Comment } from "../models/comment.model";
 
 export const postController = {
@@ -22,7 +21,7 @@ export const postController = {
         cover: req.body.cover,
         tags: req.body.tags,
         status: req.body.status || 'public',
-        userId: req.user._id,
+        user: req.user._id,
       });
       post.save((err) => {
         if (err) {
@@ -57,7 +56,7 @@ export const postController = {
         });
       }
 
-      if (req.user._id !== post.userId.toHexString()) {
+      if (req.user._id !== post.user.toHexString()) {
         return res.status(401).send({ code: 401, message: 'Authentication failed' });
       }
 
@@ -93,7 +92,7 @@ export const postController = {
         });
       }
 
-      if (req.user._id !== post.userId.toHexString()) {
+      if (req.user._id !== post.user.toHexString()) {
         return res.status(401).send({ code: 401, message: 'Authentication failed' });
       }
 
@@ -126,7 +125,7 @@ export const postController = {
         });
       }
 
-      if (req.user._id !== post.userId.toHexString()) {
+      if (req.user._id !== post.user.toHexString()) {
         return res.status(401).send({ code: 401, message: 'Authentication failed' });
       }
 
@@ -168,7 +167,7 @@ export const postController = {
           message: 'Post not found',
         });
       }
-      const author = await User.findById(post.userId);
+      const author = await User.findById(post.user);
       const userRequest = await User.findById(decoded._id);
       let isInBookmark = false;
       let isFollowed = false;
@@ -267,5 +266,55 @@ export const postController = {
         message: 'Server Error',
       });
     }
-  }
+  },
+
+  // List post public
+  getRecommendPost: async (req, res) => {
+    const pageNumber = req.query.page || 1;
+    const pageSize = req.query.size || 10;
+    try {
+      const data = await Post.find()
+      .sort({ likes: -1 })
+      .skip((pageNumber - 1) * pageSize)
+      .limit(pageSize)
+      .populate('user');
+
+      res.send(data || []);
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  },
+  getPublicPost: async (req, res) => {
+    const pageNumber = req.query.page || 1;
+    const pageSize = req.query.size || 10;
+    try {
+      const posts = await Post.find({ status: 'public' })
+      .sort({ likes: -1 })
+      .skip((pageNumber - 1) * pageSize)
+      .limit(pageSize)
+      .populate('user')
+      .lean();
+
+      const postsMapping = posts.map((post) => {
+        return {
+          ...post,
+          likes: post.likes.length,
+          comments: post.comments.length
+        };
+      });
+      const hasMore = postsMapping.length === +pageSize;
+      const jsonData = {
+        data: postsMapping || [],
+        hasMore
+      };
+
+      res.send(jsonData);
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  },
 };

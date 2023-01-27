@@ -17,7 +17,7 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Cover image is required'],
   },
-  userId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true

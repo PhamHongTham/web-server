@@ -4,6 +4,10 @@ import { isAuth } from "../middleware/auth.middleware.js";
 
 const postRouter = express.Router();
 
+// 
+postRouter.get('/recommend', postController.getRecommendPost);
+postRouter.get('/public', postController.getPublicPost);
+
 // Comment
 postRouter.post('/:id/comments', isAuth, postController.createComment);
 postRouter.get('/:id/comments', isAuth, postController.getCommentsOfPost);

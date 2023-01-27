@@ -46,7 +46,7 @@ export const bookmarkController = {
         });
       }
       res.status(200).send({
-        post: posts.bookmarks || [],
+        posts: posts.bookmarks || [],
       });
     } catch (error) {
       res.status(500).send({
