@@ -3,6 +3,7 @@ import { User } from "../models/user.model";
 import { SECRET_ACCESS_TOKEN } from '../config/constant.js';
 import { verifyToken } from '../helper/index.js'
 import { Comment } from "../models/comment.model";
+import { INFO_USER } from "../constants";
 
 export const postController = {
   createPost: async (req, res) => {
@@ -277,7 +278,7 @@ export const postController = {
       .sort({ likes: -1 })
       .skip((pageNumber - 1) * pageSize)
       .limit(pageSize)
-      .populate('user');
+      .populate('user', INFO_USER);
 
       res.send(data || []);
     } catch (error) {
@@ -294,7 +295,7 @@ export const postController = {
       .sort({ likes: -1 })
       .skip((pageNumber - 1) * pageSize)
       .limit(pageSize)
-      .populate('user')
+      .populate('user', INFO_USER)
       .lean();
 
       const postsMapping = posts.map((post) => {

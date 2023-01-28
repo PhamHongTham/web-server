@@ -1,3 +1,4 @@
+import { INFO_USER } from "../constants";
 import { User } from "../models/user.model";
 
 export const friendController = {
@@ -55,7 +56,7 @@ export const friendController = {
       }
 
       User.findById(req.params.id)
-      .populate('followers', '_id displayName picture')
+      .populate('followers', INFO_USER)
       .exec((err, user) => {
         if (err) {
           return res.status(403).send({
@@ -86,7 +87,7 @@ export const friendController = {
         });
       }
       User.findById(req.params.id)
-      .populate('followings', '_id displayName picture')
+      .populate('followings', INFO_USER)
       .exec((err, user) => {
         if (err) {
           return res.status(403).send({
