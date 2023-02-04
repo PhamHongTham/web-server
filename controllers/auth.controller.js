@@ -209,5 +209,32 @@ export const authController = {
         });
       })
     }
-  }
+  },
+  loginWithGoogle: async (req, res) => {
+    try {
+      const userExists = await User.findOne({ email: req.user.emails[0].value });
+      if (!userExists) {
+        const newUser = new User({
+          email: req.user.emails[0].value,
+          firstName: req.user.name.familyName,
+          lastName: req.user.name.givenName,
+          displayName: displayName,
+          gender: req.user.gender || 'male',
+          dob: req.user.dateOfBirth || '01/01/2000',
+          phone: req.user.phone || '000000000',
+          password: bcrypt.hashSync('', 10),
+        });
+        await newUser.save();
+        const accessToken = await generateToken(newUser, SECRET_ACCESS_TOKEN);
+        res.redirect(`http://localhost:3000/?accessToken=${accessToken}` || '/');
+      } else {
+        const accessToken = await generateToken(userExists, SECRET_ACCESS_TOKEN);
+        res.redirect(`http://localhost:3000/?accessToken=${accessToken}` || '/');
+      }
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+      });
+    }
+  },
 };
