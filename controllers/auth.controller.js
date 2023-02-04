@@ -58,7 +58,7 @@ export const authController = {
         });
       }
       const user = await User.findOne({ email: req.body.email });
-      if (!user.dsjncda) {
+      if (!user) {
         return res.status(401).send({
           code: 401,
           message: `Email or password is invalid!`
