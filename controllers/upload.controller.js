@@ -11,7 +11,7 @@ export const uploadController = {
       });
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   }

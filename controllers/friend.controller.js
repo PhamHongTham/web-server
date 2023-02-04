@@ -42,7 +42,7 @@ export const friendController = {
       res.status(200).send({isFollowed: index > -1 ? false : true})
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -74,7 +74,7 @@ export const friendController = {
       });
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -105,7 +105,7 @@ export const friendController = {
       });
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },

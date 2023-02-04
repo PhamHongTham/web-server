@@ -35,7 +35,7 @@ export const postController = {
       })
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -77,7 +77,7 @@ export const postController = {
       })
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -110,7 +110,7 @@ export const postController = {
       })
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -151,7 +151,7 @@ export const postController = {
 
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -189,7 +189,7 @@ export const postController = {
       });
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -233,7 +233,7 @@ export const postController = {
       })
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -264,7 +264,7 @@ export const postController = {
       res.status(200).send(post.comments);
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -283,7 +283,7 @@ export const postController = {
       res.send(data || []);
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -314,7 +314,7 @@ export const postController = {
       res.send(jsonData);
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },

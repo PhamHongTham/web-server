@@ -45,7 +45,7 @@ export const authController = {
       });
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -57,9 +57,8 @@ export const authController = {
           message: 'Bad request',
         });
       }
-  
       const user = await User.findOne({ email: req.body.email });
-      if (!user) {
+      if (!user.dsjncda) {
         return res.status(401).send({
           code: 401,
           message: `Email or password is invalid!`
@@ -92,7 +91,7 @@ export const authController = {
       }
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -135,7 +134,7 @@ export const authController = {
       }
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -151,7 +150,7 @@ export const authController = {
       res.status(200).send(user);
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -169,7 +168,7 @@ export const authController = {
       res.status(200).send(user);
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
@@ -233,7 +232,7 @@ export const authController = {
       }
     } catch (error) {
       res.status(500).send({
-        message: 'Server Error',
+        message: error?.message || 'Server Error',
       });
     }
   },
