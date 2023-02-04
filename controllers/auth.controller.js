@@ -217,7 +217,7 @@ export const authController = {
           email: req.user.emails[0].value,
           firstName: req.user.name.familyName,
           lastName: req.user.name.givenName,
-          displayName: displayName,
+          displayName: req.user.displayName,
           gender: req.user.gender || 'male',
           dob: req.user.dateOfBirth || '01/01/2000',
           phone: req.user.phone || '000000000',
