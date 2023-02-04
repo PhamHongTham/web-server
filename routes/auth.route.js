@@ -1,7 +1,6 @@
 import express from "express";
 import passport from "passport";
 import { authController } from "../controllers/auth.controller.js";
-import { isAuth } from "../middleware/auth.middleware.js";
 
 const authRouter = express.Router();
 

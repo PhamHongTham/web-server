@@ -1,5 +1,5 @@
-import { INFO_USER } from "../constants";
-import { User } from "../models/user.model";
+import { INFO_USER } from "../constants/index.js";
+import { User } from "../models/user.model.js";
 
 export const friendController = {
   followUser: async (req, res) => {

@@ -2,8 +2,8 @@ import { Post } from "../models/post.model";
 import { User } from "../models/user.model";
 import { SECRET_ACCESS_TOKEN } from '../config/constant.js';
 import { verifyToken } from '../helper/index.js'
-import { Comment } from "../models/comment.model";
-import { INFO_USER } from "../constants";
+import { Comment } from "../models/comment.model.js";
+import { INFO_USER } from "../constants/index.js";
 
 export const postController = {
   createPost: async (req, res) => {
@@ -35,7 +35,7 @@ export const postController = {
       })
     } catch (error) {
       res.status(500).send({
-        message: error?.message || 'Server Error',
+        message: 'Server Error',
       });
     }
   },
@@ -77,7 +77,7 @@ export const postController = {
       })
     } catch (error) {
       res.status(500).send({
-        message: error?.message || 'Server Error',
+        message: 'Server Error',
       });
     }
   },
@@ -110,7 +110,7 @@ export const postController = {
       })
     } catch (error) {
       res.status(500).send({
-        message: error?.message || 'Server Error',
+        message: 'Server Error',
       });
     }
   },
@@ -151,7 +151,7 @@ export const postController = {
 
     } catch (error) {
       res.status(500).send({
-        message: error?.message || 'Server Error',
+        message: 'Server Error',
       });
     }
   },
@@ -189,7 +189,7 @@ export const postController = {
       });
     } catch (error) {
       res.status(500).send({
-        message: error?.message || 'Server Error',
+        message: 'Server Error',
       });
     }
   },
@@ -233,7 +233,7 @@ export const postController = {
       })
     } catch (error) {
       res.status(500).send({
-        message: error?.message || 'Server Error',
+        message: 'Server Error',
       });
     }
   },
@@ -264,7 +264,7 @@ export const postController = {
       res.status(200).send(post.comments);
     } catch (error) {
       res.status(500).send({
-        message: error?.message || 'Server Error',
+        message: 'Server Error',
       });
     }
   },
@@ -283,7 +283,7 @@ export const postController = {
       res.send(data || []);
     } catch (error) {
       res.status(500).send({
-        message: error?.message || 'Server Error',
+        message: 'Server Error',
       });
     }
   },
@@ -314,7 +314,7 @@ export const postController = {
       res.send(jsonData);
     } catch (error) {
       res.status(500).send({
-        message: error?.message || 'Server Error',
+        message: 'Server Error',
       });
     }
   },
