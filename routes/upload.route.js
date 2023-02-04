@@ -1,7 +1,7 @@
 import express from "express";
 import { uploadController } from "../controllers/upload.controller";
 import { upload } from "../helper/index.js";
-import { isAuth } from "../middleware/auth.middleware";
+import { isAuth } from "../middleware/auth.middleware.js";
 
 const uploadRouter = express.Router();
 
