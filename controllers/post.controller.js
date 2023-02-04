@@ -1,5 +1,5 @@
-import { Post } from "../models/post.model";
-import { User } from "../models/user.model";
+import { Post } from "../models/post.model.js";
+import { User } from "../models/user.model.js";
 import { SECRET_ACCESS_TOKEN } from '../config/constant.js';
 import { verifyToken } from '../helper/index.js'
 import { Comment } from "../models/comment.model.js";
