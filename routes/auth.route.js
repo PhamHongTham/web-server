@@ -10,7 +10,10 @@ const authRouter = express.Router();
 // authRouter.get('/users/:id', authController.getInfoUser);
 // authRouter.put('/users/:id', isAuth, authController.updateInfo);
 
-authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+authRouter.get("/google", function(req, res, next) {
+  req.session.redirectTo = req.query.redirect_to;
+  next();
+}, passport.authenticate("google", { scope: ["profile", "email"] }));
 authRouter.get(
   "/google/callback",
   passport.authenticate('google', { scope: ['profile', 'email'] }),
