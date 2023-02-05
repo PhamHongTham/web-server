@@ -210,6 +210,7 @@ export const authController = {
     }
   },
   loginWithGoogle: async (req, res) => {
+    const fromUrl = req.protocol + '://' + req.headers.host
     try {
       const userExists = await User.findOne({ email: req.user.emails[0].value });
       if (!userExists) {
@@ -225,10 +226,10 @@ export const authController = {
         });
         await newUser.save();
         const accessToken = await generateToken(newUser, SECRET_ACCESS_TOKEN);
-        res.redirect(`http://localhost:3000/?accessToken=${accessToken}` || '/');
+        res.redirect(`${fromUrl}/?accessToken=${accessToken}` || '/');
       } else {
         const accessToken = await generateToken(userExists, SECRET_ACCESS_TOKEN);
-        res.redirect(`http://localhost:3000/?accessToken=${accessToken}` || '/');
+        res.redirect(`${fromUrl}/?accessToken=${accessToken}` || '/');
       }
     } catch (error) {
       res.status(500).send({
