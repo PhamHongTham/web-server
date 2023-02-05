@@ -226,6 +226,7 @@ export const authController = {
         });
         await newUser.save();
         const accessToken = await generateToken(newUser, SECRET_ACCESS_TOKEN);
+        console.log(`${redirectTo}`)
         res.redirect(`${redirectTo}/?accessToken=${accessToken}`);
       } else {
         const accessToken = await generateToken(userExists, SECRET_ACCESS_TOKEN);
