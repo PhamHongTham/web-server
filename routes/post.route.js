@@ -10,7 +10,7 @@ postRouter.get('/public', postController.getPublicPost);
 
 // Comment
 postRouter.post('/:id/comments', isAuth, postController.createComment);
-postRouter.get('/:id/comments', isAuth, postController.getCommentsOfPost);
+postRouter.get('/:id/comments', postController.getCommentsOfPost);
 
 postRouter.get('/:id', postController.getDetailPost);
 postRouter.post('/', isAuth, postController.createPost);

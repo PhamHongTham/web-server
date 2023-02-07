@@ -169,12 +169,12 @@ export const postController = {
         });
       }
       const author = await User.findById(post.user);
-      const userRequest = await User.findById(decoded._id);
       let isInBookmark = false;
       let isFollowed = false;
       let isLiked = false;
 
       if (token) {
+        const userRequest = await User.findById(decoded._id);
         isLiked = post.likes.some(id => id.equals(userRequest._id));
         isFollowed = author.followers.some(id => id.equals(userRequest._id));
         isInBookmark = userRequest.bookmarks.some(id => id.equals(post._id));
