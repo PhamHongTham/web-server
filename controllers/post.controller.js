@@ -126,10 +126,6 @@ export const postController = {
         });
       }
 
-      if (req.user._id !== post.user.toHexString()) {
-        return res.status(401).send({ code: 401, message: 'Authentication failed' });
-      }
-
       let index = post.likes.indexOf(req.user._id);
       if (index > -1) {
         post.likes.splice(index, 1);
