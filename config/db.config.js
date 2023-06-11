@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export const connectDb = async () => {
-  const url = process.env.DB_URL;
+  const url = "mongodb+srv://CaoKhaHieu:CaoKhaHieu@cluster0.r9hva.mongodb.net/Boogle?retryWrites=true&w=majority";
   try {
     mongoose.set("strictQuery", false);
     await mongoose.connect(url, {
