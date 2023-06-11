@@ -15,7 +15,7 @@ dotenv.config();
 app.use(session({
   resave: false,
   saveUninitialized: true,
-  secret: process.env.SECRET_APP_KEY
+  secret: process.env.SECRET_APP_KEY || 'hongtham'
 }));
 
 app.use(cors());
